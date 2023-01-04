@@ -51,12 +51,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func play_stop(_ sender: Any) {
+
         if self.switchFlg == true {
-            self.switchFlg = false
-            self.timer.invalidate()
-            self.timer = nil
-            self.bth_next.isEnabled = true
-            self.bth_back.isEnabled = true
+            stopSlide()
         } else {
             self.timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(showSlide(_:)), userInfo: nil, repeats: true)
             self.bth_next.isEnabled = false
@@ -76,8 +73,20 @@ class ViewController: UIViewController {
     }
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
     }
+
+    // スライドショー実行中の場合に停止する
+    func stopSlide(){
+        if self.switchFlg == true {
+            self.switchFlg = false
+            self.timer.invalidate()
+            self.timer = nil
+            self.bth_next.isEnabled = true
+            self.bth_back.isEnabled = true
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        stopSlide()
         let rstViewController:ResultViewController = segue.destination as! ResultViewController
         rstViewController.resultView = self.imageFiles[self.orderNo]
     }
